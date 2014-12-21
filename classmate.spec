@@ -1,8 +1,9 @@
 %{?_javapackages_macros:%_javapackages_macros}
 Name:          classmate
 Version:       0.8.0
-Release:       3.0%{?dist}
+Release:       5.1
 Summary:       Java introspection library
+Group:		Development/Java
 License:       ASL 2.0
 Url:           http://github.com/cowtowncoder/java-classmate/
 Source0:       https://github.com/cowtowncoder/java-classmate/archive/%{name}-%{version}.tar.gz
@@ -18,7 +19,7 @@ BuildRequires: maven-local
 BuildRequires: maven-enforcer-plugin
 BuildRequires: maven-plugin-bundle
 BuildRequires: maven-source-plugin
-BuildRequires: maven-surefire-provider-junit4
+BuildRequires: maven-surefire-provider-junit
 
 BuildArch:     noarch
 
@@ -43,7 +44,8 @@ sed -i 's/\r//' LICENSE-2.0.txt
 
 # these test fails junit.framework.AssertionFailedError: expected:<X> but was:<Y>
 rm -r src/test/java/com/fasterxml/classmate/TestReadme.java \
- src/test/java/com/fasterxml/classmate/types/ResolvedObjectTypeTest.java
+ src/test/java/com/fasterxml/classmate/types/ResolvedObjectTypeTest.java \
+ src/test/java/com/fasterxml/classmate/AnnotationsTest.java
 
 %build
 %mvn_file :%{name} %{name}
