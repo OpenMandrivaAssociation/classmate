@@ -1,7 +1,7 @@
 %{?_javapackages_macros:%_javapackages_macros}
 Name:          classmate
 Version:       0.8.0
-Release:       5.1
+Release:       5.2
 Summary:       Java introspection library
 Group:		Development/Java
 License:       ASL 2.0
