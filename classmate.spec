@@ -5,7 +5,7 @@ Release:       5.3
 Summary:       Java introspection library
 Group:		Development/Java
 License:       ASL 2.0
-Url:           http://github.com/cowtowncoder/java-classmate/
+Url:           https://github.com/cowtowncoder/java-classmate/
 Source0:       https://github.com/cowtowncoder/java-classmate/archive/%{name}-%{version}.tar.gz
 # classmate package don't include the license file
 Source1:       http://www.apache.org/licenses/LICENSE-2.0.txt
