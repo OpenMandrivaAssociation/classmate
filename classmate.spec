@@ -1,85 +1,33 @@
-%{?_javapackages_macros:%_javapackages_macros}
-Name:          classmate
-Version:       0.8.0
-Release:       5.3
-Summary:       Java introspection library
+Name:		classmate
+Version:	1.8.0
+Release:	1
+Summary:	Introspection of Java types with generic information
 Group:		Development/Java
-License:       ASL 2.0
-Url:           https://github.com/cowtowncoder/java-classmate/
-Source0:       https://github.com/cowtowncoder/java-classmate/archive/%{name}-%{version}.tar.gz
-# classmate package don't include the license file
-Source1:       http://www.apache.org/licenses/LICENSE-2.0.txt
-
-BuildRequires: java-devel
-BuildRequires: sonatype-oss-parent
-
-BuildRequires: junit
-
-BuildRequires: maven-local
-BuildRequires: maven-enforcer-plugin
-BuildRequires: maven-plugin-bundle
-BuildRequires: maven-source-plugin
-BuildRequires: maven-surefire-provider-junit
-
-BuildArch:     noarch
+License:	ASL 2.0
+URL:		https://github.com/FasterXML/java-classmate
+Source0:	https://github.com/FasterXML/java-classmate/archive/refs/tags/classmate-%{version}.tar.gz#/classmate-%{version}.tar.gz
+BuildArch:	noarch
+# The module descriptor is added by moditect, which is not packaged.
+%global sysjar_drops --drop org.moditect:moditect-maven-plugin
+BuildRequires:	python
+BuildRequires:	mvn(com.fasterxml:oss-parent:pom::)
+BuildRequires:	maven
+BuildRequires:	java-current-devel
+BuildSystem:	maven
 
 %description
-Library for introspecting types with full generic information
-including resolving of field and method types.
-
-%package javadoc
-Summary:       Javadoc for %{name}
-
-%description javadoc
-This package contains javadoc for %{name}.
+ClassMate resolves field and method types, including generics.
+1.8.0 is the current release and the one Jackson uses. It targets
+Java 8. The OSGi bundle packaging is built as a plain jar.
 
 %prep
-%setup -q -n java-%{name}-%{name}-%{version}
-
-find . -name "*.class" -delete
-find . -name "*.jar" -delete
-
-cp -p %{SOURCE1} .
-sed -i 's/\r//' LICENSE-2.0.txt
-
-# these test fails junit.framework.AssertionFailedError: expected:<X> but was:<Y>
-rm -r src/test/java/com/fasterxml/classmate/TestReadme.java \
- src/test/java/com/fasterxml/classmate/types/ResolvedObjectTypeTest.java \
- src/test/java/com/fasterxml/classmate/AnnotationsTest.java
-
-%build
-%mvn_file :%{name} %{name}
-%mvn_build
-
-%install
-%mvn_install
+%autosetup -n java-classmate-classmate-%{version}
+python - <<'PY'
+from pathlib import Path
+p = Path("pom.xml")
+text = p.read_text()
+p.write_text(text.replace("<packaging>bundle</packaging>", "<packaging>jar</packaging>", 1))
+PY
 
 %files -f .mfiles
-%doc LICENSE-2.0.txt README.md release-notes.txt
-
-%files javadoc -f .mfiles-javadoc
-%doc LICENSE-2.0.txt
-
-%changelog
-* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.0-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
-
-* Sat Jul 06 2013 gil cattaneo <puntogil@libero.it> 0.8.0-2
-- switch to XMvn
-- minor changes to adapt to current guideline
-
-* Thu Apr 18 2013 gil cattaneo <puntogil@libero.it> 0.8.0-1
-- update to 0.8.0
-
-* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.4-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
-
-* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 0.5.4-3
-- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
-- Replace maven BuildRequires with maven-local
-
-* Sat May 05 2012 gil cattaneo <puntogil@libero.it> 0.5.4-2
-- changed summary
-
-* Sun Apr 22 2012 gil cattaneo <puntogil@libero.it> 0.5.4-1
-- initial rpm
+%doc LICENSE README.md
