@@ -11,6 +11,8 @@ BuildArch:	noarch
 %global sysjar_drops --drop org.moditect:moditect-maven-plugin
 BuildRequires:	python
 BuildRequires:	mvn(com.fasterxml:oss-parent:pom::)
+# oss-parent pins the compiler plugin's asm dependency at 9.11.1.
+BuildRequires:	mvn(org.ow2.asm:asm)
 BuildRequires:	maven
 BuildRequires:	java-current-devel
 BuildSystem:	maven
